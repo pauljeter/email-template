@@ -1,0 +1,21 @@
+{
+  "name": "email-template",
+  "version": "1.0.0",
+  "homepage": "https://github.com/pauljeter/email-template",
+  "authors": [
+    "pauljeter <pauljeter@gmail.com>"
+  ],
+  "description": "Email Template",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ink": "~1.0.5"
+  }
+}
