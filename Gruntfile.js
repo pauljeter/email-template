@@ -68,11 +68,10 @@ module.exports = function(grunt) {
     watch: {
       html: {
         files: [
-        'src/**/*.html', 
+        'src/**/*', 
         ],
         tasks: [
-        'assemble:docsDev', 
-        'shell:testDocs'
+        'build'
         ],
         options: {
           livereload: true,
@@ -96,5 +95,5 @@ module.exports = function(grunt) {
     'copy:build_css',
     'assemble:css'
     ]);
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['build', 'watch']);
 };
