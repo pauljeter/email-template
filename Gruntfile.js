@@ -52,23 +52,39 @@ module.exports = function(grunt) {
       }
     },
 
-    premailer: {
-      simple: {
+    uncss: {
+      dist: {
+        src: ['build/email.html'],
+        dest: 'build/css/tidy.css',
         options: {
-          removeComments: true
+          report: 'min' // optional: include to report savings
+        }
+      }
+    },
+
+    processhtml: {
+      dist: {
+        files: {
+          'dist/email.html': ['build/email.html']
+        }
+      }
+    },
+
+    premailer: {
+      main: {
+        options: {
+          verbose: true
         },
-        files: [{
-            expand: true,
-            src: ['build/*.html'],
-            dest: 'dist'
-        }]
+        files: {
+          'dist/email-inline.html': ['build/email.html']
+        }
       }
     },
 
     watch: {
       html: {
         files: [
-        'src/**/*', 
+        'src/**/*',
         ],
         tasks: [
         'build'
@@ -85,7 +101,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-mailgun');
+  grunt.loadNpmTasks('grunt-uncss');
+  grunt.loadNpmTasks('grunt-processhtml');
+  // grunt.loadNpmTasks('grunt-mailgun');
   grunt.loadNpmTasks('grunt-premailer');
 
   grunt.registerTask('build', [
@@ -93,7 +111,17 @@ module.exports = function(grunt) {
     'less',
     'copy:build_images',
     'copy:build_css',
-    'assemble:css'
+    'assemble'
+    ]);
+  grunt.registerTask('compile', [
+    'clean',
+    'less',
+    'copy:build_images',
+    'copy:build_css',
+    'assemble',
+    'uncss',
+    'processhtml',
+    'premailer'
     ]);
   grunt.registerTask('default', ['build', 'watch']);
 };
