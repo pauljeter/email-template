@@ -12,8 +12,8 @@ module.exports = function(grunt) {
       }
     },
 
-    clean: [ 
-      'build', 
+    clean: [
+      'build',
       'dist'
     ],
 
@@ -25,10 +25,11 @@ module.exports = function(grunt) {
         expand: true
       },
       build_css: {
-        src: ['*.css'],
+        src: ['bower_components/**/*.css'],
         dest: 'build/css',
-        cwd: 'src/css',
-        expand: true
+        cwd: '',
+        expand: true,
+        flatten: true
       },
       dist_html: {
         src: ['**/*.html'],
@@ -94,16 +95,41 @@ module.exports = function(grunt) {
         },
       },
     },
+
+    connect: {
+      livereload: {
+        options: {
+          livereload: 35729,
+          open: true,
+          base: 'build'
+        }
+      }
+    },
+
+    mailgun: {
+      mailer: {
+        options: {
+          key: 'key-05966721013314a7671362d390eb2c7c',
+          sender: 'paul@pauljeter.net',
+          recipient: [
+            'pauljeter@gmail.com',
+          ],
+          subject: ''
+        },
+        src: ['dist/email-inline.html']
+      }
+    }
   });
 
   grunt.loadNpmTasks('assemble');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-uncss');
   grunt.loadNpmTasks('grunt-processhtml');
-  // grunt.loadNpmTasks('grunt-mailgun');
+  grunt.loadNpmTasks('grunt-mailgun');
   grunt.loadNpmTasks('grunt-premailer');
 
   grunt.registerTask('build', [
@@ -123,5 +149,9 @@ module.exports = function(grunt) {
     'processhtml',
     'premailer'
     ]);
-  grunt.registerTask('default', ['build', 'watch']);
+  grunt.registerTask('default', ['build', 'connect', 'watch']);
+  grunt.registerTask('test', [
+      'compile',
+      'mailgun'
+    ]);
 };
